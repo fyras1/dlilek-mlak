@@ -2,6 +2,8 @@
 #include <windows.h>
 
 
+
+
 using namespace std;
 
  long long f,s,j,i,n,a,b,x,c,win;
@@ -16,6 +18,22 @@ long long moyenne()
      return (m/24-j);
  }
 
+ void SetColor(int ForgC)
+ {
+ WORD wColor;
+
+  HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+  CONSOLE_SCREEN_BUFFER_INFO csbi;
+
+                       //We use csbi for the wAttributes word.
+ if(GetConsoleScreenBufferInfo(hStdOut, &csbi))
+ {
+                 //Mask out all but the background attribute, and add in the forgournd color
+      wColor = (csbi.wAttributes & 0xF0) + (ForgC & 0x0F);
+      SetConsoleTextAttribute(hStdOut, wColor);
+ }
+ return;
+ }
 void gotoxy(int x, int y)
 {
   COORD coord;
@@ -32,7 +50,8 @@ void aff_f(long long f)
     for(i=1;i<25;i++)
  {
        if (i<=12)
-       { gotoxy(30,5+i);
+       { SetColor(11);
+            gotoxy(30,5+i);
            if (w[i]!=0)
               cout<<"["<<w[i]<<" DT]";
            else
@@ -40,6 +59,10 @@ void aff_f(long long f)
        }
        else
        {
+           if (i<19)
+            SetColor(14);
+           else
+            SetColor(12);
          gotoxy(68,i-7);
          if (w[i]!=0)
              cout<<"["<<w[i]<<" DT]" ;
@@ -56,11 +79,12 @@ void aff_w()
 {
     for (i=1;i<=24;i++)
      {
+         SetColor(2);
          gotoxy(5,1+i);
          if (r[i]>0)
          cout<<r[i];
          else if (r[i]==-1)
-            cout<<"X";
+            {SetColor(10); cout<<"X";}
          else
          {
              cout<<" * ";
@@ -80,6 +104,27 @@ bool rech(int s)
 
 int main()
 {
+		system("Color 0C");
+/*
+BACKGROUND
+0 = Black
+1 = Blue
+2 = Green
+3 = Aqua
+4 = Red
+5 = Purple
+6 = Yellow
+7 = White
+8 = Gray
+9 = Light Blue
+
+FONT
+A = Light Green
+B = Light Aqua
+C = Light Red
+D = Light Purple
+E = Light Yellow
+F = Bright White*/
 
     srand ( time(NULL) );
     for(i=0;i<25;i++)
@@ -153,9 +198,7 @@ int main()
                  t[n]=z;
 
              }
-            }
-
-
+           }
       }
 
     system("CLS");
@@ -177,5 +220,6 @@ int main()
  }
                 gotoxy(43,24);
 
-cout<<"RBA7T m3ANA : "<<win<<" DT"<<endl<<endl<<endl<<endl;
+cout<<"RBA7T M3ANA : "<<win<<" DT"<<endl<<endl<<endl<<endl;
+cin>>win;
 }
